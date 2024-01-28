@@ -9,16 +9,21 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  UseInterceptors,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { AuthService } from './auth/auth.service';
 import {
   CreateUserDto,
   ForgotPasswordDto,
+  RegisterSerializeDto,
   ResetPasswordDto,
   UpdateUserDto,
   UserLoginDto,
+  LoginSerializeDto,
+  UserSerializeDto,
 } from './dto';
+import { UsersService } from './users.service';
+import { AuthService } from './auth/auth.service';
+import { SerializeInterceptor } from 'src/common/interceptors/serialize.interceptor';
 
 @Controller('users')
 export class UsersController {
@@ -27,12 +32,14 @@ export class UsersController {
     private readonly authService: AuthService,
   ) {}
 
+  @UseInterceptors(new SerializeInterceptor(RegisterSerializeDto))
   @Post('auth/register')
   @HttpCode(HttpStatus.CREATED)
   async register(@Body() createUserDto: CreateUserDto) {
     return await this.authService.register(createUserDto);
   }
 
+  @UseInterceptors(new SerializeInterceptor(LoginSerializeDto))
   @Post('auth/login')
   @HttpCode(HttpStatus.OK)
   async login(@Body() userLoginDto: UserLoginDto) {
@@ -41,7 +48,7 @@ export class UsersController {
 
   @Post('auth/logout')
   @HttpCode(HttpStatus.OK)
-  async logout(@Body('phone') phone: string) {
+  async logout(@Body() phone: string) {
     return await this.authService.logout(phone);
   }
 
@@ -56,21 +63,25 @@ export class UsersController {
     return await this.authService.forgotPassword(forgotPasswordDto);
   }
 
+  @UseInterceptors(new SerializeInterceptor(UserSerializeDto))
   @Get()
   async findAll(@Query() userQuery: UserQuery) {
     return await this.usersService.findAll(userQuery);
   }
 
+  @UseInterceptors(new SerializeInterceptor(UserSerializeDto))
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.usersService.findOne(id);
   }
 
+  @UseInterceptors(new SerializeInterceptor(UserSerializeDto))
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return await this.usersService.update(id, updateUserDto);
   }
 
+  @UseInterceptors(new SerializeInterceptor(UserSerializeDto))
   @Delete(':id')
   async remove(@Param('id') id: string) {
     return await this.usersService.remove(id);
