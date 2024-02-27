@@ -20,6 +20,11 @@ export class CreateProductDto {
   @IsNotEmpty()
   readonly unitPrice: number;
 
+  @IsNumber()
+  @Min(0)
+  @IsNotEmpty()
+  readonly vat: number;
+
   @IsString()
   @IsNotEmpty()
   readonly category: string;

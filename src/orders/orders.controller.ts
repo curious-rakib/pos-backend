@@ -12,6 +12,7 @@ import {
 import { OrdersService } from './orders.service';
 import { SerializeInterceptor } from 'src/common/interceptors/serialize.interceptor';
 import { CreateOrderDto, OrderSerializeDto, UpdateOrderDto } from './dto';
+import { OrderAccountSerializeDto } from './dto/serialize/order-account-serialize.dto';
 
 @Controller('orders')
 export class OrdersController {
@@ -26,6 +27,12 @@ export class OrdersController {
   @Get()
   async findAll(@Query() orderQuery: OrderQuery) {
     return await this.ordersService.findAll(orderQuery);
+  }
+
+  @UseInterceptors(new SerializeInterceptor(OrderAccountSerializeDto))
+  @Get('accounts')
+  async findAllByAccounts(@Query() orderQuery: OrderQuery) {
+    return await this.ordersService.findAllByAccounts(orderQuery);
   }
 
   @Get(':id')

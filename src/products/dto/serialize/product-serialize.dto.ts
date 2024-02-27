@@ -16,6 +16,9 @@ export class ProductSerializeDto {
   readonly unitPrice: number;
 
   @Expose()
+  readonly vat: number;
+
+  @Expose()
   readonly category: string;
 
   @Expose()

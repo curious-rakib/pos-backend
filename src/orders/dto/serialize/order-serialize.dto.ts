@@ -13,6 +13,9 @@ class ProductDto {
   readonly unitPrice: number;
 
   @Expose()
+  readonly vat: number;
+
+  @Expose()
   readonly quantity: number;
 }
 

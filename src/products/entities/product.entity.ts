@@ -12,6 +12,9 @@ export class Product extends mongoose.Document {
   @Prop({ required: true, type: Number })
   unitPrice: number;
 
+  @Prop({ required: true, type: Number })
+  vat: number;
+
   @Prop({ required: true, type: String })
   category: string;
 

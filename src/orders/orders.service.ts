@@ -45,6 +45,25 @@ export class OrdersService {
     return orders;
   }
 
+  async findAllByAccounts(orderQuery: OrderQuery) {
+    let query = this.orderModel.find();
+
+    // Apply pagination
+    if (orderQuery.page && orderQuery.limit) {
+      query = query
+        .skip((orderQuery.page - 1) * orderQuery.limit)
+        .limit(orderQuery.limit);
+    }
+
+    const orders = await query.exec();
+
+    if (orders.length === 0) {
+      throw new NotFoundException('Orders not found !');
+    }
+
+    return orders;
+  }
+
   async findOne(id: string) {
     const order = await this.orderModel.findById(id);
 

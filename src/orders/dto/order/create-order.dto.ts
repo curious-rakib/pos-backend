@@ -27,6 +27,11 @@ class ProductDto {
   readonly unitPrice: number;
 
   @IsNumber()
+  @Min(0)
+  @IsNotEmpty()
+  readonly vat: number;
+
+  @IsNumber()
   @IsPositive()
   @IsNotEmpty()
   readonly quantity: number;
